@@ -1,0 +1,28 @@
+@import "~bootstrap/scss/bootstrap";
+@import '~react-pro-sidebar/dist/scss/styles.scss';
+
+body {
+    height: 100vh;
+    #root {
+        height: 100%;
+        .App {
+            display: flex;
+            position: relative;
+            height: 100%;
+            main {
+                padding: 24px;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                overflow-y: auto;
+
+                .btn {
+                    margin: 10px;
+                }
+                .pull-right {
+                    float: right;
+                }
+            }
+        }
+    }
+}
