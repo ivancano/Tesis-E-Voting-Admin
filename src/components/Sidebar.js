@@ -23,7 +23,7 @@ function Sidebar() {
             <Link to={'/candidates'}>Candidatos</Link>
           </MenuItem>
           <MenuItem icon={<FaGem />}>
-            <Link to={'/voters'}>votantes</Link>
+            <Link to={'/voters'}>Votantes</Link>
           </MenuItem>
         </Menu>
       </SidebarContent>

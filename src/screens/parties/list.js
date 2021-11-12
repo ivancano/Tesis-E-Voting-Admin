@@ -4,55 +4,53 @@ import {
 } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import CandidateService from "../../services/candidates";
+import TableList from "../../components/TableList";
+import PartyService from "../../services/parties";
 
-const CandidatesList = () => {
+const PartiesList = () => {
 
-    const [candidates, setCandidates] = useState([])
+    const [parties, setParties] = useState([])
 
     useEffect(() => {
-        CandidateService.getAll()
+        PartyService.getAll()
         .then(data => {
-            setCandidates(data)
+            setParties(data)
         })
     }, []);
 
     const deleteRow = (id) => {
         if(window.confirm('¿Está seguro que desea borrar este registro?')) {
-            CandidateService.delete(id);
+            PartyService.delete(id);
             window.location.reload();
         }
     }
     
-    const columnLabels = ['Nombre', 'Apellido', 'Partido'];
+    const columnLabels = ['Nombre', 'Estado'];
 
     return (
         <>
             <h4>Candidatos</h4>
             <div className="table-wrapper">
-                <Link to={'/candidates/new'} className="btn btn-sm btn-primary">
-                    Nuevo Candidato
+                <Link to={'/parties/new'} className="btn btn-sm btn-primary">
+                    Nuevo Partido Político
                 </Link>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Partido</th>
+                            {columnLabels && columnLabels.map(i => (<th>{i}</th>))}
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {candidates.length > 0 && candidates.map((i, k) => (
+                        {parties && parties.map((i, k) => (
                             <tr>
                                 <td>{i.name}</td>
-                                <td>{i.lastname}</td>
-                                <td>{i.party.name}</td>
+                                <td>{i.status ? 'Activo' : 'Inactivo'}</td>
                                 <td>
-                                    <Link to={'candidates/show/' + i.id} className="btn btn-sm btn-secondary">
+                                    <Link to={'parties/show/' + i.id} className="btn btn-sm btn-secondary">
                                         Ver
                                     </Link>
-                                    <Link to={'candidates/edit/' + i.id} className="btn btn-sm btn-primary">
+                                    <Link to={'parties/edit/' + i.id} className="btn btn-sm btn-primary">
                                         Editar
                                     </Link>
                                     <Button size="sm" variant="danger" onClick={() => deleteRow(i.id)}>Eliminar</Button>
@@ -66,4 +64,4 @@ const CandidatesList = () => {
     );
 }
 
-export default CandidatesList;
+export default PartiesList;

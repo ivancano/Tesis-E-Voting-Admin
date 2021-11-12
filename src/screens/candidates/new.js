@@ -8,20 +8,13 @@ import Button from 'react-bootstrap/Button';
 import CandidateService from "../../services/candidates";
 import PartyService from "../../services/parties";
 
-const CandidatesEdit = (props) => {
+const CandidatesNew = (props) => {
     const history = useHistory();
     const [name, setName] = useState('')
     const [lastname, setLastname] = useState('')
     const [party, setParty] = useState('')
     const [parties, setParties] = useState([])
-    const id = props.match.params.id;
     useEffect(() => {
-        CandidateService.getById(id)
-        .then(data => {
-            setName(data.name)
-            setLastname(data.lastname)
-            setParty(data.partyId)
-        })
         PartyService.getAll()
         .then(data => {
             setParties(data)
@@ -29,7 +22,7 @@ const CandidatesEdit = (props) => {
     }, [])
 
     const save = () => {
-        CandidateService.update(id, {name: name, lastname: lastname, partyId: party})
+        CandidateService.create({name: name, lastname: lastname, partyId: party})
         .then(data => {
             history.push("/candidates");
         });
@@ -37,7 +30,7 @@ const CandidatesEdit = (props) => {
 
     return (
         <>
-            <h4>Editar Candidato</h4>
+            <h4>Nuevo Candidato</h4>
             <div className="form-wrapper">
                 <Form onSubmit={props.onSubmit}>
                     <Form.Group className="mb-3">
@@ -67,4 +60,4 @@ const CandidatesEdit = (props) => {
     );
 }
 
-export default CandidatesEdit;
+export default CandidatesNew;

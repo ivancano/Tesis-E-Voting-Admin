@@ -6,13 +6,12 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
 const TableList = (props) => {
-
-    const deleteRow = (id) => {
-        window.confirm('¿Está seguro que desea borrar este registro?')
-    }
-
+    console.log(props);
     return (
         <div className="table-wrapper">
+            <Link to={props.newButtonLink} className="btn btn-sm btn-primary">
+                { props.newButtonText }
+            </Link>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -21,20 +20,19 @@ const TableList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.rowValues && props.rowValues.map(i => (
+                    {props.rowValues && props.rowValues.map((i, k) => (
                         <tr>
-                            <td>value 1</td>
-                            <td>value 2</td>
-                            <td>value 3</td>
-                            <td>value 4</td>
+                            <td>{i[1]}</td>
+                            <td>{i[2]}</td>
+                            <td>{i[3]}</td>
                             <td>
-                                <Link to={props.baseLink + '/show/' + i.id} className="btn btn-sm btn-secondary">
+                                <Link to={props.baseLink + '/show/' + i[0]} className="btn btn-sm btn-secondary">
                                     Ver
                                 </Link>
-                                <Link to={props.baseLink + '/edit/' + i.id} className="btn btn-sm btn-primary">
+                                <Link to={props.baseLink + '/edit/' + i[0]} className="btn btn-sm btn-primary">
                                     Editar
                                 </Link>
-                                <Button size="sm" variant="danger" onClick={() => deleteRow(i.id)}>Eliminar</Button>
+                                <Button size="sm" variant="danger" onClick={() => props.deleteRow(i[0])}>Eliminar</Button>
                             </td>
                         </tr>
                     ))}

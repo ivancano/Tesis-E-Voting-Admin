@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ShowForm from "../../components/ShowForm";
+import CandidateService from "../../services/candidates";
 
-const CandidatesShow = () => {
+
+const CandidatesShow = (props) => {
+
+    const [candidate, setCandidate] = useState(null)
+    useEffect(() => {
+        const id = props.match.params.id;
+        CandidateService.getById(id)
+        .then(data => {
+            setCandidate([
+                {
+                    label: 'Nombre',
+                    type: 'text',
+                    value: data.name
+                },
+                {
+                    label: 'Apellido',
+                    type: 'text',
+                    value: data.lastname
+                },
+                {
+                    label: 'Partido',
+                    type: 'text',
+                    value: data.party.name
+                },
+            ])
+        })
+    }, [])
     
     const fields = [
         {
@@ -24,7 +51,7 @@ const CandidatesShow = () => {
     return (
         <>
             <h4>Información de Candidato</h4>
-            <ShowForm fields={fields} cancelLink={"/candidates"} />
+            <ShowForm fields={candidate} cancelLink={"/candidates"} />
         </>
     );
 }
