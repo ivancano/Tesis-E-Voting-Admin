@@ -13,6 +13,7 @@ import PartiesList from "./screens/parties/list";
 import PartiesEdit from "./screens/parties/edit";
 import PartiesShow from "./screens/parties/show";
 import PartiesNew from "./screens/parties/new";
+import Construction from "./screens/construction";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route component={PartiesEdit} path="/parties/edit/:id" />
               <Route component={PartiesShow} path="/parties/show/:id" />
               <Route component={PartiesNew} path="/parties/new" />
+              <Route component={Construction} path="/construction" />
           </Switch>
         </main>
       </Router>
