@@ -14,7 +14,7 @@ function Sidebar() {
       <SidebarContent>
         <Menu iconShape="square">
           <MenuItem icon={<FaGem />}>
-            <Link to={'/construction'}>Elecciones</Link>
+            <Link to={'/elections'}>Elecciones</Link>
           </MenuItem>
           <MenuItem icon={<FaGem />}>
             <Link to={'/parties'}>Partidos Políticos</Link>

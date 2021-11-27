@@ -13,6 +13,10 @@ import PartiesList from "./screens/parties/list";
 import PartiesEdit from "./screens/parties/edit";
 import PartiesShow from "./screens/parties/show";
 import PartiesNew from "./screens/parties/new";
+import ElectionsList from "./screens/elections/list";
+import ElectionsEdit from "./screens/elections/edit";
+import ElectionsShow from "./screens/elections/show";
+import ElectionsNew from "./screens/elections/new";
 import Construction from "./screens/construction";
 
 function App() {
@@ -30,6 +34,10 @@ function App() {
               <Route component={PartiesEdit} path="/parties/edit/:id" />
               <Route component={PartiesShow} path="/parties/show/:id" />
               <Route component={PartiesNew} path="/parties/new" />
+              <Route component={ElectionsList} path="/elections" exact />
+              <Route component={ElectionsEdit} path="/elections/edit/:id" />
+              <Route component={ElectionsShow} path="/elections/show/:id" />
+              <Route component={ElectionsNew} path="/elections/new" />
               <Route component={Construction} path="/construction" />
           </Switch>
         </main>
