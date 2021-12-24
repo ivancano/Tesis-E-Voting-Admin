@@ -55,7 +55,40 @@ const ElectionService = {
                 reject(err)
             })
         })
-    }
+    },
+    getDetails: (electionId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(process.env.REACT_APP_BACKEND_URL+'election-details?electionId='+electionId)
+            .then(data => {
+                resolve(data.data);
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    },
+    createDetail: (params) => {
+        return new Promise((resolve, reject) => {
+            axios.post(process.env.REACT_APP_BACKEND_URL+'election-details', params)
+            .then(data => {
+                resolve(data.data);
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    },
+    deleteDetail: (electionId) => {
+        return new Promise((resolve, reject) => {
+            axios.delete(process.env.REACT_APP_BACKEND_URL+'election-details/'+electionId)
+            .then(data => {
+                resolve(data.data);
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    },
 }
 
 export default ElectionService

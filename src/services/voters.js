@@ -1,20 +1,9 @@
 import axios from 'axios';
 
-const CandidateService = {
+const VoterService = {
     getAll: () => {
         return new Promise((resolve, reject) => {
-            axios.get(process.env.REACT_APP_BACKEND_URL+'candidates')
-            .then(data => {
-                resolve(data.data);
-            })
-            .catch(err => {
-                reject(err)
-            })
-        })
-    },
-    getByParty: (partyId) => {
-        return new Promise((resolve, reject) => {
-            axios.get(process.env.REACT_APP_BACKEND_URL+'candidates?partyId='+partyId)
+            axios.get(process.env.REACT_APP_BACKEND_URL+'voters')
             .then(data => {
                 resolve(data.data);
             })
@@ -25,7 +14,7 @@ const CandidateService = {
     },
     getById: (id) => {
         return new Promise((resolve, reject) => {
-            axios.get(process.env.REACT_APP_BACKEND_URL+'candidates/'+id)
+            axios.get(process.env.REACT_APP_BACKEND_URL+'voters/'+id)
             .then(data => {
                 resolve(data.data);
             })
@@ -36,7 +25,7 @@ const CandidateService = {
     },
     create: (params) => {
         return new Promise((resolve, reject) => {
-            axios.post(process.env.REACT_APP_BACKEND_URL+'candidates', params)
+            axios.post(process.env.REACT_APP_BACKEND_URL+'voters', params)
             .then(data => {
                 resolve(data.data);
             })
@@ -47,7 +36,7 @@ const CandidateService = {
     },
     update: (id, params) => {
         return new Promise((resolve, reject) => {
-            axios.put(process.env.REACT_APP_BACKEND_URL+'candidates/'+id, params)
+            axios.put(process.env.REACT_APP_BACKEND_URL+'voters/'+id, params)
             .then(data => {
                 resolve(data.data);
             })
@@ -58,7 +47,7 @@ const CandidateService = {
     },
     delete: (id) => {
         return new Promise((resolve, reject) => {
-            axios.delete(process.env.REACT_APP_BACKEND_URL+'candidates/'+id)
+            axios.delete(process.env.REACT_APP_BACKEND_URL+'voters/'+id)
             .then(data => {
                 resolve(data.data);
             })
@@ -69,4 +58,4 @@ const CandidateService = {
     }
 }
 
-export default CandidateService
+export default VoterService

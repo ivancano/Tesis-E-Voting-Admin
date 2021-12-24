@@ -60,6 +60,9 @@ const ElectionsList = () => {
                                     <Link to={'elections/show/' + i.id} className="btn btn-sm btn-secondary">
                                         Ver
                                     </Link>
+                                    <Link to={'elections/details/' + i.id} className="btn btn-sm btn-secondary">
+                                        Candidatos
+                                    </Link>
                                     <Link to={'elections/edit/' + i.id} className="btn btn-sm btn-primary">
                                         Editar
                                     </Link>
