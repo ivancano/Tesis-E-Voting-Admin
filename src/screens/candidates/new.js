@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { useForm } from "react-hook-form";
 import {
     Link,
     useHistory
@@ -10,9 +11,7 @@ import PartyService from "../../services/parties";
 
 const CandidatesNew = (props) => {
     const history = useHistory();
-    const [name, setName] = useState('')
-    const [lastname, setLastname] = useState('')
-    const [party, setParty] = useState('')
+    const { register, formState: { errors }, handleSubmit } = useForm();
     const [parties, setParties] = useState([])
     useEffect(() => {
         PartyService.getAll()
@@ -21,8 +20,8 @@ const CandidatesNew = (props) => {
         })
     }, [])
 
-    const save = () => {
-        CandidateService.create({name: name, lastname: lastname, partyId: party})
+    const onSubmit = formData => {
+        CandidateService.create(formData)
         .then(data => {
             history.push("/candidates");
         });
@@ -32,27 +31,28 @@ const CandidatesNew = (props) => {
         <>
             <h4>Nuevo Candidato</h4>
             <div className="form-wrapper">
-                <Form onSubmit={props.onSubmit}>
+                <Form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group className="mb-3">
                         <Form.Label>Nombre</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setName(e.target.value)} value={name} />
+                        <Form.Control type={'text'} {...register("name", { required: true })} aria-invalid={errors.name ? "true" : "false"} />
+                        {errors.name?.type === 'required' && <p className="text-danger">Nombre requerido</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Apellido</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setLastname(e.target.value)} value={lastname} />
+                        <Form.Control type={'text'} {...register("lastname", { required: true })} aria-invalid={errors.lastname ? "true" : "false"} />
+                        {errors.lastname?.type === 'required' && <p className="text-danger">Apellido requerido</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Partido Político</Form.Label>
-                        <Form.Select aria-label="Default select example" onChange={e => setParty(e.target.value)}>
-                            <option>Seleccione un Partido</option>
+                        <Form.Select {...register("partyId")}>
                             {parties.map(p => (
-                                <option selected={p.id == party} value={p.id}>{p.name}</option>
+                                <option value={p.id}>{p.name}</option>
                             ))}
                         </Form.Select>
                     </Form.Group>
                     <div className="pull-right">
                         <Link to={'/candidates'} className="btn btn-danger btn-block">Cancelar</Link>
-                        <Button className="btn btn-primary" onClick={save}>Guardar</Button>
+                        <Button className="btn btn-primary" type="submit">Guardar</Button>
                     </div>
                 </Form>
             </div>

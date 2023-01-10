@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { useForm } from "react-hook-form";
 import {
     Link,
     useHistory
@@ -9,13 +10,10 @@ import VoterService from "../../services/voters";
 
 const VotersNew = (props) => {
     const history = useHistory();
-    const [name, setName] = useState('')
-    const [lastname, setLastname] = useState('')
-    const [dni, setDni] = useState('')
-    const [status, setStatus] = useState(true)
+    const { register, formState: { errors }, handleSubmit } = useForm();
 
-    const save = () => {
-        VoterService.create({name: name, lastname: lastname, dni: dni, status: status})
+    const onSubmit = formData => {
+        VoterService.create(formData)
         .then(data => {
             history.push("/voters");
         });
@@ -25,29 +23,32 @@ const VotersNew = (props) => {
         <>
             <h4>Nuevo Votante</h4>
             <div className="form-wrapper">
-                <Form onSubmit={props.onSubmit}>
+                <Form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group className="mb-3">
                         <Form.Label>Nombre</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setName(e.target.value)} value={name} />
+                        <Form.Control type={'text'} {...register("name", { required: true })} aria-invalid={errors.name ? "true" : "false"} />
+                        {errors.name?.type === 'required' && <p className="text-danger">Nombre requerido</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Apellido</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setLastname(e.target.value)} value={lastname} />
+                        <Form.Control type={'text'} {...register("lastname", { required: true })} aria-invalid={errors.lastname ? "true" : "false"} />
+                        {errors.lastname?.type === 'required' && <p className="text-danger">Apellido requerido</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>DNI</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setDni(e.target.value)} value={dni} />
+                        <Form.Control type={'text'} {...register("dni", { required: true })} aria-invalid={errors.dni ? "true" : "false"} />
+                        {errors.dni?.type === 'required' && <p className="text-danger">DNI requerido</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Estado</Form.Label>
-                        <Form.Select aria-label="Default select example" onChange={e => setStatus(e.target.value)}>
-                            <option selected={status == false} value={false}>Inactivo</option>
-                            <option selected={status == true} value={true}>Activo</option>
+                        <Form.Select {...register("status")}>
+                            <option value={true}>Activo</option>
+                            <option value={false}>Inactivo</option>
                         </Form.Select>
                     </Form.Group>
                     <div className="pull-right">
                         <Link to={'/voters'} className="btn btn-danger btn-block">Cancelar</Link>
-                        <Button className="btn btn-primary" onClick={save}>Guardar</Button>
+                        <Button className="btn btn-primary" type="submit">Guardar</Button>
                     </div>
                 </Form>
             </div>

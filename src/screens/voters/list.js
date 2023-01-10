@@ -2,13 +2,96 @@ import React, { useState, useEffect } from "react";
 import {
     Link
 } from "react-router-dom";
-import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import BootstrapTable from 'react-bootstrap-table-next';
+import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import VoterService from "../../services/voters";
 
 const VotersList = () => {
 
     const [voters, setVoters] = useState([])
+    const [file, setFile] = useState();
+
+    const { SearchBar } = Search;
+
+    const hiddenFileInput = React.useRef(null);
+
+    const handleOnChange = (e) => {
+        setFile(e.target.files[0]);
+        const formValues = new FormData();
+        formValues.append('file', e.target.files[0]);
+        VoterService.createBatch(formValues)
+        .then(data => {
+            window.location.reload();
+        })
+    };
+
+    const handleOnSubmit = (e) => {
+        hiddenFileInput.current.click();
+    };
+
+    const optionsPagination = {
+        firstPageText: 'Primera',
+        prePageText: 'Anterior',
+        nextPageText: 'Siguiente',
+        lastPageText: 'Última',
+        nextPageTitle: 'First page',
+        prePageTitle: 'Pre page',
+        firstPageTitle: 'Next page',
+        lastPageTitle: 'Last page',
+        showTotal: true,
+        paginationTotalRenderer: (from, to, size) => (
+            <span className="react-bootstrap-table-pagination-total">
+              { to } de { size } resultados
+            </span>
+        ),
+        disablePageTitle: true,
+      };
+
+    const columns = [
+        {
+            text: 'Nombre',
+            dataField: 'name',
+            sort: true,
+        },
+        {
+            text: 'Apellido',
+            dataField: 'lastname',
+            sort: true,
+        },
+        {
+            text: 'DNI',
+            dataField: 'dni',
+            sort: true,
+        },
+        {
+            text: 'Estado',
+            dataField: 'status',
+            formatter: cell => {
+                return cell ? 'Activo' : 'Inactivo'
+            },
+            sort: true
+        },
+        {
+            dataField: 'actions',
+            text: 'Acciones',
+            formatter: (cell, row, rowIndex, formatExtraData) => {
+                return (
+                    <>
+                        <Link to={'voters/show/' + row.id} className="btn btn-sm btn-secondary">
+                            Ver
+                        </Link>
+                        <Link to={'voters/edit/' + row.id} className="btn btn-sm btn-primary">
+                            Editar
+                        </Link>
+                        <Button size="sm" variant="danger" onClick={() => deleteRow(row.id)}>Eliminar</Button>
+                    </>
+                )
+            }
+        }
+    ];
 
     useEffect(() => {
         VoterService.getAll()
@@ -23,8 +106,6 @@ const VotersList = () => {
             window.location.reload();
         }
     }
-    
-    const columnLabels = ['Nombre', 'Apellido', 'DNI', 'Estado'];
 
     return (
         <>
@@ -33,36 +114,51 @@ const VotersList = () => {
                 <Link to={'/voters/new'} className="btn btn-sm btn-primary">
                     Nuevo Votante
                 </Link>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>DNI</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {voters.length > 0 && voters.map((i, k) => (
-                            <tr>
-                                <td>{i.name}</td>
-                                <td>{i.lastname}</td>
-                                <td>{i.dni}</td>
-                                <td>{i.status ? 'Activo' : 'Inactivo'}</td>
-                                <td>
-                                    <Link to={'voters/show/' + i.id} className="btn btn-sm btn-secondary">
-                                        Ver
-                                    </Link>
-                                    <Link to={'voters/edit/' + i.id} className="btn btn-sm btn-primary">
-                                        Editar
-                                    </Link>
-                                    <Button size="sm" variant="danger" onClick={() => deleteRow(i.id)}>Eliminar</Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+                <div>
+                    <form>
+                        <input
+                            type={"file"}
+                            id={"csvFileInput"}
+                            accept={".csv"}
+                            onChange={handleOnChange}
+                            ref={hiddenFileInput}
+                            style={{display:'none'}} 
+                        />
+                        <Button
+                            className="btn btn-sm btn-secondary pull-right"
+                            onClick={(e) => {
+                                handleOnSubmit(e);
+                            }}
+                        >
+                            Carga masiva
+                        </Button>
+                    </form>
+                </div>
+                <ToolkitProvider
+                    keyField="id"
+                    columns={columns}
+                    data={voters}
+                    search
+                >
+                    {
+                        props => (
+                            <div>
+                                <SearchBar 
+                                    { ...props.searchProps }
+                                    placeholder={"Buscar"}
+                                    srText={""}
+                                />
+                                <hr />
+                                <BootstrapTable
+                                    { ...props.baseProps }
+                                    pagination={ paginationFactory(optionsPagination) }
+                                    striped
+                                    hover
+                                />
+                            </div>
+                        )
+                    }
+                </ToolkitProvider>
             </div>
         </>
     );
