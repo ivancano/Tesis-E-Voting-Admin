@@ -34,6 +34,17 @@ const PartyService = {
             })
         })
     },
+    createBatch: (params) => {
+        return new Promise((resolve, reject) => {
+            axios.post(process.env.REACT_APP_BACKEND_URL+'parties/batch', params)
+            .then(data => {
+                resolve(data.data);
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    },
     update: (id, params) => {
         return new Promise((resolve, reject) => {
             axios.put(process.env.REACT_APP_BACKEND_URL+'parties/'+id, params)
