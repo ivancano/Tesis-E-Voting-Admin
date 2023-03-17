@@ -99,7 +99,7 @@ const PartiesList = () => {
 
     return (
         <>
-            <h4>Candidatos</h4>
+            <h4>Partidos Políticos</h4>
             <div className="table-wrapper">
                 <Link to={'/parties/new'} className="btn btn-sm btn-primary pull-right">
                     Nuevo Partido Político

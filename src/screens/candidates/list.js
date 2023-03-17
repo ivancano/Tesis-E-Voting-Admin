@@ -108,7 +108,7 @@ const CandidatesList = () => {
         <>
             <h4>Candidatos</h4>
             <div className="table-wrapper">
-                <Link to={'/candidates/new'} className="btn btn-sm btn-primary">
+                <Link to={'/candidates/new'} className="btn btn-sm btn-primary pull-right">
                     Nuevo Candidato
                 </Link>
                 <div>

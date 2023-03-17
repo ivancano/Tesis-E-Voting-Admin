@@ -23,6 +23,17 @@ const VoterService = {
             })
         })
     },
+    getElectionsByVoter: (voterId) => {
+        return new Promise((resolve, reject) => {
+            axios.get(process.env.REACT_APP_BACKEND_URL+'election-voters?voterId='+voterId)
+            .then(data => {
+                resolve(data.data);
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    },
     create: (params) => {
         return new Promise((resolve, reject) => {
             axios.post(process.env.REACT_APP_BACKEND_URL+'voters', params)
@@ -35,13 +46,13 @@ const VoterService = {
         })
     },
     createBatch: (params) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             axios.post(process.env.REACT_APP_BACKEND_URL+'voters/batch', params)
             .then(data => {
                 resolve(data.data);
             })
             .catch(err => {
-                reject(err)
+                reject(err.response.data)
             })
         })
     },
@@ -66,7 +77,18 @@ const VoterService = {
                 reject(err)
             })
         })
-    }
+    },
+    assignToElections: (id, params) => {
+        return new Promise((resolve, reject) => {
+            axios.post(process.env.REACT_APP_BACKEND_URL+'voters/elections/'+id, params)
+            .then(data => {
+                resolve(data.data);
+            })
+            .catch(err => {
+                reject(err)
+            })
+        })
+    },
 }
 
 export default VoterService

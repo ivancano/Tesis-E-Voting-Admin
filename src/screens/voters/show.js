@@ -29,6 +29,15 @@ const VotersShow = (props) => {
                 <p><strong>Apellido:</strong> {voter.lastname}</p>
                 <p><strong>DNI:</strong> {voter.dni}</p>
                 <p><strong>Estado:</strong> {voter.status ? 'Activo' : 'Inactivo'}</p>
+                {voter.dniFront && voter.dniBack && (
+                <>
+                <p><strong>DNI Imagenes:</strong></p>
+                <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                    <img width={500} src={'http://localhost:8080/api/v1/voters/dni/front/'+voter.dniFront}/>
+                    <img width={500} src={'http://localhost:8080/api/v1/voters/dni/back/'+voter.dniBack}/>
+                </div>
+                </>
+                )}
                 <div className="pull-right">
                     <Link to={'/voters'} className="btn btn-danger btn-block">Cancelar</Link>
                 </div>

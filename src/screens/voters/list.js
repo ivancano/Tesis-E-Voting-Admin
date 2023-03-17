@@ -18,14 +18,17 @@ const VotersList = () => {
 
     const hiddenFileInput = React.useRef(null);
 
-    const handleOnChange = (e) => {
+    const handleOnChange = async e => {
         setFile(e.target.files[0]);
         const formValues = new FormData();
         formValues.append('file', e.target.files[0]);
-        VoterService.createBatch(formValues)
-        .then(data => {
+        try {
+            await VoterService.createBatch(formValues);
             window.location.reload();
-        })
+        }
+        catch(error) {
+            alert(error)
+        }
     };
 
     const handleOnSubmit = (e) => {
@@ -87,6 +90,9 @@ const VotersList = () => {
                             Editar
                         </Link>
                         <Button size="sm" variant="danger" onClick={() => deleteRow(row.id)}>Eliminar</Button>
+                        <Link to={'voters/elections/' + row.id} className="btn btn-sm btn-secondary">
+                            Elecciones
+                        </Link>
                     </>
                 )
             }
@@ -111,7 +117,7 @@ const VotersList = () => {
         <>
             <h4>Votantes</h4>
             <div className="table-wrapper">
-                <Link to={'/voters/new'} className="btn btn-sm btn-primary">
+                <Link to={'/voters/new'} className="btn btn-sm btn-primary pull-right">
                     Nuevo Votante
                 </Link>
                 <div>

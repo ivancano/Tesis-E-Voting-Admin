@@ -17,11 +17,14 @@ import VotersList from "./screens/voters/list";
 import VotersEdit from "./screens/voters/edit";
 import VotersShow from "./screens/voters/show";
 import VotersNew from "./screens/voters/new";
+import VotersElections from "./screens/voters/elections";
 import ElectionsList from "./screens/elections/list";
 import ElectionsEdit from "./screens/elections/edit";
 import ElectionsShow from "./screens/elections/show";
 import ElectionsNew from "./screens/elections/new";
 import ElectionDetails from "./screens/elections/details";
+import VoteCounter from "./screens/elections/voteCounter";
+import VoteCounterDetail from "./screens/elections/voteCounterDetail";
 import Construction from "./screens/construction";
 
 function App() {
@@ -43,11 +46,14 @@ function App() {
               <Route component={VotersEdit} path="/voters/edit/:id" />
               <Route component={VotersShow} path="/voters/show/:id" />
               <Route component={VotersNew} path="/voters/new" />
+              <Route component={VotersElections} path="/voters/elections/:id" />
               <Route component={ElectionsList} path="/elections" exact />
               <Route component={ElectionsEdit} path="/elections/edit/:id" />
               <Route component={ElectionsShow} path="/elections/show/:id" />
               <Route component={ElectionsNew} path="/elections/new" />
               <Route component={ElectionDetails} path="/elections/details/:id" />
+              <Route component={VoteCounter} path="/elections/vote-counter/:id" />
+              <Route component={VoteCounterDetail} path="/elections/vote-counter-detail/:id/:candidateId" />
               <Route component={Construction} path="/construction" />
           </Switch>
         </main>

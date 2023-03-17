@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import { useForm, Controller } from "react-hook-form";
 import {
     Link,
     useHistory
@@ -11,17 +12,10 @@ import ElectionsService from "../../services/elections";
 
 const ElectionsNew = (props) => {
     const history = useHistory();
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [startTime, setStartTime] = useState(new Date())
-    const [endTime, setEndTime] = useState(new Date())
-    const [status, setStatus] = useState(true)
-    useEffect(() => {
-        
-    }, [])
+    const { register, formState: { errors }, handleSubmit, control } = useForm();
 
-    const save = () => {
-        ElectionsService.create({name: name, description: description, startTime: startTime, endTime: endTime, status: status})
+    const onSubmit = formData => {
+        ElectionsService.create(formData)
         .then(data => {
             history.push("/elections");
         });
@@ -31,33 +25,63 @@ const ElectionsNew = (props) => {
         <>
             <h4>Nueva Elección</h4>
             <div className="form-wrapper">
-                <Form onSubmit={props.onSubmit}>
+                <Form onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group className="mb-3">
                         <Form.Label>Nombre</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setName(e.target.value)} value={name} />
+                        <Form.Control type={'text'} {...register("name", { required: true })} aria-invalid={errors.name ? "true" : "false"} />
+                        {errors.name?.type === 'required' && <p className="text-danger">Nombre requerido</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Descripción</Form.Label>
-                        <Form.Control type={'text'} onChange={e => setDescription(e.target.value)} value={description} />
+                        <Form.Control type={'text'} {...register("description", { required: true })} aria-invalid={errors.description ? "true" : "false"} />
+                        {errors.description?.type === 'required' && <p className="text-danger">Descripción requerida</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Fecha de Inicio</Form.Label>
-                        <DatePicker dateFormat="Pp" showTimeSelect selected={startTime} onChange={(date) => setStartTime(date)} />
+                        <Controller
+                            name="startTime"
+                            rules={{ required: true }}
+                            control={control}
+                            aria-invalid={errors.startTime ? "true" : "false"}
+                            render={({ field }) => (
+                                <DatePicker
+                                    selected={field.value}
+                                    onChange={(date) => field.onChange(date)}
+                                    dateFormat="Pp"
+                                    showTimeSelect
+                                />
+                            )}
+                        />
+                        {errors.startTime?.type === 'required' && <p className="text-danger">Fecha de inicio requerida</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Fecha de Fin</Form.Label>
-                        <DatePicker dateFormat="Pp" showTimeSelect selected={endTime} onChange={(date) => setEndTime(date)} />
+                        <Controller
+                            name="endTime"
+                            rules={{ required: true }}
+                            control={control}
+                            aria-invalid={errors.startTime ? "true" : "false"}
+                            render={({ field }) => (
+                                <DatePicker
+                                    selected={field.value}
+                                    onChange={(date) => field.onChange(date)}
+                                    dateFormat="Pp"
+                                    showTimeSelect
+                                />
+                            )}
+                        />
+                        {errors.endTime?.type === 'required' && <p className="text-danger">Fecha de fin requerida</p>}
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Estado</Form.Label>
-                        <Form.Select aria-label="Default select example" onChange={e => setStatus(e.target.value)}>
-                            <option selected={status == false} value={false}>Inactivo</option>
-                            <option selected={status == true} value={true}>Activo</option>
+                        <Form.Select {...register("status")}>
+                            <option value={true}>Activo</option>
+                            <option value={false}>Inactivo</option>
                         </Form.Select>
                     </Form.Group>
                     <div className="pull-right">
                         <Link to={'/elections'} className="btn btn-danger btn-block">Cancelar</Link>
-                        <Button className="btn btn-primary" onClick={save}>Guardar</Button>
+                        <Button className="btn btn-primary" type="submit">Guardar</Button>
                     </div>
                 </Form>
             </div>
